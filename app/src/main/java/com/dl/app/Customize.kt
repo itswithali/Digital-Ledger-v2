@@ -48,11 +48,11 @@ private object Bk {
 }
 
 fun enableReminders() {
-    Store.mutate { val n = nprefs(); n.on = true; n.since = System.currentTimeMillis(); n.dismissed = true }
+    Store.mutate { val n = Store.nprefs(); n.on = true; n.since = System.currentTimeMillis(); n.dismissed = true }
     if (!Notifier.permGranted(Store.app)) Ui.requestNotif()
     toast("Reminders on")
 }
-fun disableReminders() { Store.mutate { nprefs().on = false } }
+fun disableReminders() { Store.mutate { Store.nprefs().on = false } }
 
 @Composable
 fun SubTitle(text: String) = T(text, 15f, pal().text, display = true, spacing = .04f, modifier = Modifier.padding(bottom = 8.dp))
@@ -294,16 +294,16 @@ fun CustomizePage() {
                 Btn("Send a test") { if (!granted) Ui.requestNotif(); toast("Test sent — lock the screen or switch apps to see the system version."); Notifier.notify(ctx, 99, "Digital Ledger", "Reminders are working.") }
             }
             Spacer(Modifier.height(10.dp))
-            NfRow("Timers & focus", "Alert when a timer or focus session finishes") { OnOff(n.timers) { v -> Store.mutate { nprefs().timers = v } } }
+            NfRow("Timers & focus", "Alert when a timer or focus session finishes") { OnOff(n.timers) { v -> Store.mutate { Store.nprefs().timers = v } } }
             NfRow("Objectives", "A reminder on the morning an objective is due, and once if it becomes overdue") {
-                OnOff(n.hw) { v -> Store.mutate { nprefs().hw = v } }; TimeField(n.hwTime, { t -> Store.mutate { nprefs().hwTime = t } }, Modifier.width(140.dp))
+                OnOff(n.hw) { v -> Store.mutate { Store.nprefs().hw = v } }; TimeField(n.hwTime, { t -> Store.mutate { Store.nprefs().hwTime = t } }, Modifier.width(140.dp))
             }
             NfRow("Evening before", "Heads-up the day before something is due") {
-                OnOff(n.hwEve) { v -> Store.mutate { nprefs().hwEve = v } }; TimeField(n.hwEveTime, { t -> Store.mutate { nprefs().hwEveTime = t } }, Modifier.width(140.dp))
+                OnOff(n.hwEve) { v -> Store.mutate { Store.nprefs().hwEve = v } }; TimeField(n.hwEveTime, { t -> Store.mutate { Store.nprefs().hwEveTime = t } }, Modifier.width(140.dp))
             }
             NfRow("Classes", "Before each class on the days you set in Classes") {
-                OnOff(n.cls) { v -> Store.mutate { nprefs().cls = v } }
-                Pick("Remind before class", listOf(0 to "When class starts", 5 to "5 min before", 10 to "10 min before", 15 to "15 min before", 30 to "30 min before", 60 to "1 hour before").map { PickOpt(it.second, it.first.toString()) }, n.clsLead.toString(), { v -> Store.mutate { nprefs().clsLead = v.toInt() } }, Modifier.width(190.dp))
+                OnOff(n.cls) { v -> Store.mutate { Store.nprefs().cls = v } }
+                Pick("Remind before class", listOf(0 to "When class starts", 5 to "5 min before", 10 to "10 min before", 15 to "15 min before", 30 to "30 min before", 60 to "1 hour before").map { PickOpt(it.second, it.first.toString()) }, n.clsLead.toString(), { v -> Store.mutate { Store.nprefs().clsLead = v.toInt() } }, Modifier.width(190.dp))
             }
             Spacer(Modifier.height(8.dp))
             MutedS("Reminders are scheduled with Android’s alarm service, so they arrive even when the app is closed.")
