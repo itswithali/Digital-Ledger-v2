@@ -134,7 +134,7 @@ fun TodayPage() {
                 Spacer(Modifier.height(10.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Btn("Turn on", primary = true) { enableReminders() }
-                    Btn("Not now") { Store.mutate { nprefs().dismissed = true } }
+                    Btn("Not now") { Store.mutate { Store.nprefs().dismissed = true } }
                 }
             }
             Spacer(Modifier.height(10.dp))
