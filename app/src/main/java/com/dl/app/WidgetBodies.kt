@@ -21,12 +21,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -292,8 +294,21 @@ private fun ColumnScope.WStopwatch(w: Widget) {
     }
 }
 
-fun Modifier.dashedBottom(p: Pal): Modifier = this.drawBehind {
-    drawLine(p.border, Offset(0f, size.height), Offset(size.width, size.height), 1f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(4.dp.toPx(), 3.dp.toPx())))
+@Composable
+fun Modifier.dashedBottom(p: Pal): Modifier {
+    val density = LocalDensity.current
+    return this.drawBehind {
+        val dashWidth = with(density) { 4.dp.toPx() }
+        val dashGap = with(density) { 3.dp.toPx() }
+        val strokeWidth = with(density) { 1.dp.toPx() }
+        drawLine(
+            p.border,
+            Offset(0f, size.height),
+            Offset(size.width, size.height),
+            strokeWidth,
+            pathEffect = PathEffect.dashPathEffect(floatArrayOf(dashWidth, dashGap))
+        )
+    }
 }
 
 // ───────── to-do ─────────
